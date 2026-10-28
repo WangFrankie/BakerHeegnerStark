@@ -5,7 +5,7 @@ Authors: Frankie Wang
 -/
 
 import BakerHeegnerStark.Statement
-import ImaginaryClassNumberOne.IdealReductions
+import BakerHeegnerStark.IdealReductions
 import QuadraticNumberFields.ClassGroup.GenusTheory.Sieve
 
 /-!
@@ -14,13 +14,37 @@ import QuadraticNumberFields.ClassGroup.GenusTheory.Sieve
 Genus theory reduces the problem to prime parameters. The split-at-two case
 gives `-7`, and the exceptional prime `3` is already known. Consequently the
 full classification is equivalent to its restriction to primes `p ≡ 3 (mod 8)`,
-`p ≠ 3`. This reduction uses only proved arithmetic results from the dependency.
+`p ≠ 3`. This reduction uses the local ideal-theoretic proofs and the genus
+sieve from QuadraticNumberFields.
+
+The two elementary branch theorems below are extracted from
+`ImaginaryClassNumberOne/StarkHeegner.lean` at QNF commit
+`196dd48b3439cc731397fd2cf9b8ac48da211a22`, retaining their original proofs.
 -/
 
-open QuadraticNumberFields QuadraticNumberFields.Heegner
+open QuadraticNumberFields
 open scoped NumberField
 
 namespace BakerHeegnerStark
+
+/-- In the non-half-integral branch, ramification at `2` leaves only `-1` or `-2`. -/
+theorem classNumber_eq_one_imp_mem_heegnerSet_of_mod_four_ne_one
+    (d : ℤ) [Fact (Squarefree d)] [Fact (d ≠ 1)] (hd : d < 0) (hd4 : d % 4 ≠ 1)
+    (h : NumberField.classNumber (Qsqrtd (d : ℚ)) = 1) :
+    d ∈ heegnerSet := by
+  rcases eq_neg_one_or_eq_neg_two_of_classNumber_eq_one_of_mod_four_ne_one
+      d hd hd4 h with rfl | rfl <;>
+    simp [heegnerSet]
+
+/-- In the split half-integral branch, the norm obstruction at `2` leaves only `-7`. -/
+theorem classNumber_eq_one_imp_mem_heegnerSet_of_mod_eight_eq_one
+    (d : ℤ) [Fact (Squarefree d)] [Fact (d ≠ 1)] (hd : d < 0) (hd8 : d % 8 = 1)
+    (h : NumberField.classNumber (Qsqrtd (d : ℚ)) = 1) :
+    d ∈ heegnerSet := by
+  have hd_eq : d = -7 :=
+    eq_neg_seven_of_classNumber_eq_one_of_mod_eight_eq_one d hd hd8 h
+  rw [hd_eq]
+  simp [heegnerSet]
 
 /-- The remaining class-number-one classification for primes inert at `2`,
 after treating the exceptional prime `3`. This proposition is not yet proved. -/

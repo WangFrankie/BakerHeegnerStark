@@ -4,17 +4,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Frankie Wang
 -/
 
-import ImaginaryClassNumberOne.ClassNumberOne
+import BakerHeegnerStark.ClassNumberOne
 
 /-!
 # The Imaginary Quadratic Class-Number-One Classification
 
 The target proposition states the unconditional Baker-Heegner-Stark theorem.
 Defining this proposition does not prove it. The nine individual class-number-one
-results are supplied by QuadraticNumberFields.
+results are proved in `BakerHeegnerStark.ClassNumberOne`.
 -/
 
-open QuadraticNumberFields QuadraticNumberFields.Heegner
+open QuadraticNumberFields
 open scoped NumberField
 
 namespace BakerHeegnerStark
