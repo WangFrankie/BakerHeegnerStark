@@ -1,0 +1,7 @@
+/.lake
+*.olean
+*.ilean
+*.trace
+/.omc/
+/.vscode/
+.DS_Store

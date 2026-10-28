@@ -1,0 +1,19 @@
+name = "BakerHeegnerStark"
+version = "0.1.0"
+keywords = ["number-theory", "class-number", "complex-multiplication"]
+defaultTargets = ["BakerHeegnerStark"]
+lintDriver = "batteries/runLinter"
+
+[leanOptions]
+pp.unicode.fun = true
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "QuadraticNumberFields"
+git = "https://github.com/WangFrankie/QuadraticNumberFields.git"
+rev = "196dd48b3439cc731397fd2cf9b8ac48da211a22"
+
+[[lean_lib]]
+name = "BakerHeegnerStark"
