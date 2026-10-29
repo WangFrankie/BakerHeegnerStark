@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Frankie Wang
 -/
 
-import BakerHeegnerStark.HeckeTwo
+import BakerHeegnerStark.ModularForms.Hecke.Two
 
 /-!
 Extracted from `QNFMathlib/NumberTheory/ModularForms/HeckeTwoSymmetric.lean` in

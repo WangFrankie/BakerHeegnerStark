@@ -30,8 +30,10 @@ records its source path and immutable revision.
 
 The general modular-function layer has also been extracted from
 `QNFMathlib/NumberTheory/ModularForms/` into seven modules under
-`BakerHeegnerStark/`: `DiscriminantCoeffs`, `Weber`, `HeckeTwo`,
-`HeckeTwoSymmetric`, `JInvariant`, `WeberPolynomial`, and `ModularPolynomialTwo`.
+`BakerHeegnerStark/ModularForms/`: `DiscriminantCoefficients.lean`,
+`Weber/Basic.lean`, `Hecke/Two.lean`, `Hecke/TwoSymmetric.lean`,
+`JInvariant/Basic.lean`, `Weber/Polynomial.lean`, and
+`ModularPolynomial/LevelTwo.lean`.
 These retain the `ModularForm` namespace, their original proofs and attribution,
 and depend only on mathlib and each other, not on QNF arithmetic.
 
@@ -53,7 +55,7 @@ relation encodes a finite gamma-prime table; assuming an associated point
 already restricts the prime to that table. The missing analytic CM association
 must be proved, not imported as an assumption. The two unconditional
 elementary branches of historical `StarkHeegner` are retained in
-`BakerHeegnerStark/InertPrimes.lean`.
+`BakerHeegnerStark/ClassNumberOne/InertPrimes.lean`.
 
 ## Current mathematical results
 
@@ -139,7 +141,7 @@ analytic CM connections are the missing part.
 ### Remaining mathematical work, in development order
 
 1. **Analytic normalization.** Eta's reality and strict positivity on the
-   positive imaginary axis are proved in `Eta.lean`. Next deduce positivity
+   positive imaginary axis are proved in `ModularForms/Eta/Positivity.lean`. Next deduce positivity
    of the Weber functions, then prove
    `𝔣⁸ = 𝔣₁⁸ + 𝔣₂⁸` and
    `γ₂ = (𝔣²⁴ - 16)/𝔣⁸ = (𝔣₁²⁴ + 16)/𝔣₁⁸ = (𝔣₂²⁴ + 16)/𝔣₂⁸`,
@@ -187,19 +189,19 @@ pinned source. The axiom audit permits only `propext`, `Classical.choice`, and
 
 ## Files
 
-- `BakerHeegnerStark/ClassNumberOne.lean`: the nine Minkowski/splitting proofs.
-- `BakerHeegnerStark/IdealReductions.lean`: ideal-theoretic norm and prime-shape reductions.
-- `BakerHeegnerStark/Diophantine.lean`: Heegner's integral points and their gamma values.
+- `BakerHeegnerStark/ClassNumberOne/KnownCases.lean`: the nine Minkowski/splitting proofs.
+- `BakerHeegnerStark/ClassNumberOne/IdealReductions.lean`: ideal-theoretic norm and prime-shape reductions.
+- `BakerHeegnerStark/ClassNumberOne/Heegner/IntegralPoints.lean`: Heegner's integral points and their gamma values.
 - `BakerHeegnerStark/Statement.lean`: the unconditional classification statement.
-- `BakerHeegnerStark/InertPrimes.lean`: the proved elementary branches and inert-prime reduction.
-- `BakerHeegnerStark/DiscriminantCoeffs.lean`: low-order `q`-expansion coefficients.
-- `BakerHeegnerStark/Eta.lean`: eta's real product expansion and positive-imaginary-axis positivity.
-- `BakerHeegnerStark/Weber.lean`: eta quotients, transformation laws, and product identity.
-- `BakerHeegnerStark/HeckeTwo.lean`: the weight-12 Hecke identity and first symmetric identity.
-- `BakerHeegnerStark/HeckeTwoSymmetric.lean`: the weight-24 second symmetric identity.
-- `BakerHeegnerStark/JInvariant.lean`: `j`, `γ₂`, and their basic analytic properties.
-- `BakerHeegnerStark/WeberPolynomial.lean`: Weber's cubic and rational expressions for `j`.
-- `BakerHeegnerStark/ModularPolynomialTwo.lean`: the level-two modular polynomial and equation.
+- `BakerHeegnerStark/ClassNumberOne/InertPrimes.lean`: the proved elementary branches and inert-prime reduction.
+- `BakerHeegnerStark/ModularForms/DiscriminantCoefficients.lean`: low-order `q`-expansion coefficients.
+- `BakerHeegnerStark/ModularForms/Eta/Positivity.lean`: eta's real product expansion and positive-imaginary-axis positivity.
+- `BakerHeegnerStark/ModularForms/Weber/Basic.lean`: eta quotients, transformation laws, and product identity.
+- `BakerHeegnerStark/ModularForms/Hecke/Two.lean`: the weight-12 Hecke identity and first symmetric identity.
+- `BakerHeegnerStark/ModularForms/Hecke/TwoSymmetric.lean`: the weight-24 second symmetric identity.
+- `BakerHeegnerStark/ModularForms/JInvariant/Basic.lean`: `j`, `γ₂`, and their basic analytic properties.
+- `BakerHeegnerStark/ModularForms/Weber/Polynomial.lean`: Weber's cubic and rational expressions for `j`.
+- `BakerHeegnerStark/ModularForms/ModularPolynomial/LevelTwo.lean`: the level-two modular polynomial and equation.
 - `BakerHeegnerStark.lean`: public entry point for the arithmetic and analytic proofs.
 - `scripts/check_axioms.lean`: axiom audit of 62 proved results.
 

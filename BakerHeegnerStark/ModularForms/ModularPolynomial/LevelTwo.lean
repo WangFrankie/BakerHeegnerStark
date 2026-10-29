@@ -6,7 +6,7 @@ Authors: Frankie Wang
 
 import Mathlib.Algebra.Polynomial.Bivariate
 import Mathlib.Tactic.ComputeDegree
-import BakerHeegnerStark.WeberPolynomial
+import BakerHeegnerStark.ModularForms.Weber.Polynomial
 
 /-!
 # The Classical Modular Polynomial of Level Two

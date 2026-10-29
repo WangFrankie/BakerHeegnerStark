@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Frankie Wang
 -/
 
-import BakerHeegnerStark.DiscriminantCoeffs
-import BakerHeegnerStark.Weber
+import BakerHeegnerStark.ModularForms.DiscriminantCoefficients
+import BakerHeegnerStark.ModularForms.Weber.Basic
 
 /-!
 Extracted from `QNFMathlib/NumberTheory/ModularForms/HeckeTwo.lean` in

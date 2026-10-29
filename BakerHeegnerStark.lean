@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Frankie Wang
 -/
 
-import BakerHeegnerStark.InertPrimes
-import BakerHeegnerStark.Diophantine
-import BakerHeegnerStark.Eta
-import BakerHeegnerStark.ModularPolynomialTwo
+import BakerHeegnerStark.ClassNumberOne.InertPrimes
+import BakerHeegnerStark.ClassNumberOne.Heegner.IntegralPoints
+import BakerHeegnerStark.ModularForms.Eta.Positivity
+import BakerHeegnerStark.ModularForms.ModularPolynomial.LevelTwo
 
 /-!
 # The Baker-Heegner-Stark Theorem
@@ -17,6 +17,6 @@ classification is the proposition `BakerHeegnerStark.ClassNumberOneClassificatio
 The nine known cases, ideal-theoretic reductions, Heegner integral-point
 classification, and general Weber/modular-polynomial identities are proved
 here. Quadratic-field and binary-quadratic-form theory remains in
-QuadraticNumberFields. The remaining Weber identities and
-complex-multiplication arguments are still to be proved.
+QuadraticNumberFields. This import exposes the extracted core; subsequent
+analytic and arithmetic modules build on it.
 -/

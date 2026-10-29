@@ -5,7 +5,7 @@ Authors: Frankie Wang
 -/
 
 import BakerHeegnerStark.Statement
-import BakerHeegnerStark.IdealReductions
+import BakerHeegnerStark.ClassNumberOne.IdealReductions
 import QuadraticNumberFields.ClassGroup.GenusTheory.Sieve
 
 /-!

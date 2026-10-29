@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Frankie Wang
 -/
 
-import BakerHeegnerStark.HeckeTwoSymmetric
-import BakerHeegnerStark.JInvariant
+import BakerHeegnerStark.ModularForms.Hecke.TwoSymmetric
+import BakerHeegnerStark.ModularForms.JInvariant.Basic
 
 /-!
 # Weber's Cubic and the Modular `j`-Invariant
