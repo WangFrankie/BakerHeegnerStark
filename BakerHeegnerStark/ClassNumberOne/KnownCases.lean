@@ -18,8 +18,8 @@ and authorship are preserved; application declarations now live in
 This file proves that the nine imaginary quadratic fields `ℚ(√d)` with
 `d ∈ {-1, -2, -3, -7, -11, -19, -43, -67, -163}` (the Heegner numbers)
 all have class number one. This is the elementary direction of the
-Baker-Heegner-Stark theorem. The converse remains the target proposition
-in `BakerHeegnerStark.Statement`.
+Baker-Heegner-Stark theorem. The converse is proved by
+`BakerHeegnerStark.classNumberOneClassification` in `ClassNumberOne/Classification.lean`.
 
 ## Proof strategy
 
@@ -186,8 +186,8 @@ theorem classNumber_eq_one_neg163 :
 
 /-! ## The Heegner numbers, packaged -/
 
-/-- The nine Heegner parameters. Each gives class number one; the assertion
-that these exhaust all negative squarefree parameters remains to be proved. -/
+/-- The nine Heegner parameters. Their exhaustion of the negative squarefree
+class-number-one parameters is `BakerHeegnerStark.classNumberOneClassification`. -/
 def heegnerSet : Finset ℤ := {-1, -2, -3, -7, -11, -19, -43, -67, -163}
 
 /-- The known-cases direction of the Baker-Heegner-Stark theorem: every Heegner

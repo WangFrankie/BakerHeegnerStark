@@ -47,7 +47,8 @@ theorem classNumber_eq_one_imp_mem_heegnerSet_of_mod_eight_eq_one
   simp [heegnerSet]
 
 /-- The remaining class-number-one classification for primes inert at `2`,
-after treating the exceptional prime `3`. This proposition is not yet proved. -/
+after treating the exceptional prime `3`. It is proved from the general modular
+polynomial theorem and three CM theorems in `BakerHeegnerStark.HeegnerClassification`. -/
 def InertPrimeClassification : Prop :=
   ∀ (p : ℕ) [Fact (Squarefree (-(p : ℤ)))] [Fact (-(p : ℤ) ≠ 1)],
     p.Prime → p % 8 = 3 → p ≠ 3 →

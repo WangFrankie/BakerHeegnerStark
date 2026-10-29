@@ -9,9 +9,10 @@ import BakerHeegnerStark.ClassNumberOne.KnownCases
 /-!
 # The Imaginary Quadratic Class-Number-One Classification
 
-The target proposition states the unconditional Baker-Heegner-Stark theorem.
-Defining this proposition does not prove it. The nine individual class-number-one
-results are proved in `BakerHeegnerStark.ClassNumberOne`.
+`ClassNumberOneClassification` states the Baker-Heegner-Stark theorem.
+It is proved by `BakerHeegnerStark.classNumberOneClassification` in
+`ClassNumberOne/Classification.lean`. The nine individual class-number-one results
+are proved in `ClassNumberOne/KnownCases.lean`.
 -/
 
 open QuadraticNumberFields
@@ -21,7 +22,7 @@ namespace BakerHeegnerStark
 
 /-- A negative squarefree integer defines a quadratic field of class number one
 exactly when it is one of `-1, -2, -3, -7, -11, -19, -43, -67, -163`.
-This is the theorem to be proved in this project. -/
+The proof is `BakerHeegnerStark.classNumberOneClassification`. -/
 def ClassNumberOneClassification : Prop :=
   ∀ (d : ℤ) [Fact (Squarefree d)] [Fact (d ≠ 1)], d < 0 →
     (NumberField.classNumber (Qsqrtd (d : ℚ)) = 1 ↔ d ∈ heegnerSet)
