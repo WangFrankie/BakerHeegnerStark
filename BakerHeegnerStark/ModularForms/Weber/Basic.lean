@@ -301,6 +301,52 @@ theorem weberF_neg_inv {z : ℂ} (hz : 0 < z.im) : weberF (-1 / z) = weberF z :=
   apply mul_right_cancel₀ hprod
   linear_combination h1 - h2
 
+/-- The product expansion `𝔣(z) = e^{-πiz/24} ∏ₙ (1 + e^{πiz(2n+1)})`. -/
+theorem weberF_eq_exp_mul_tprod {z : ℂ} (hz : 0 < z.im) :
+    weberF z = cexp (-(π * I * z) / 24) *
+      ∏' n : ℕ, (1 + cexp (π * I * z) ^ (2 * n + 1)) := by
+  set r := 𝕢 2 z with hr
+  have hr1 : ‖r‖ < 1 := Function.Periodic.norm_qParam_lt_one (by norm_num) hz
+  have hnr : ‖-r‖ < 1 := by rwa [norm_neg]
+  have e1 : 𝕢 1 ((z + 1) / 2) = -r := by
+    simp only [hr, Function.Periodic.qParam]
+    rw [show 2 * (π : ℂ) * I * ((z + 1) / 2) / ((1 : ℝ) : ℂ) = 2 * π * I * z / ((2 : ℝ) : ℂ) +
+      π * I by push_cast; ring, Complex.exp_add, Complex.exp_pi_mul_I]
+    ring
+  have e4 : 𝕢 1 z = r ^ 2 := by
+    simp only [hr, Function.Periodic.qParam, ← Complex.exp_nat_mul]
+    congr 1
+    push_cast
+    ring
+  have hrexp : r = cexp (π * I * z) := by
+    simp only [hr, Function.Periodic.qParam]
+    congr 1
+    push_cast
+    ring
+  have hsplit : eulerProd (-r) = oddProd (-r) * eulerProd (r ^ 2) := by
+    have h := eulerProd_eq_oddProd_mul hnr
+    rwa [neg_sq] at h
+  have hη : η z ≠ 0 := eta_ne_zero hz
+  have hE : eulerProd (r ^ 2) ≠ 0 := by
+    intro h0
+    apply hη
+    rw [eta_eq, e4, h0, mul_zero]
+  have hodd : oddProd (-r) = ∏' n : ℕ, (1 + cexp (π * I * z) ^ (2 * n + 1)) := by
+    rw [oddProd, ← hrexp]
+    congr 1
+    funext n
+    rw [Odd.neg_pow ⟨n, rfl⟩]
+    ring
+  have hconst : zeta48⁻¹ * 𝕢 24 ((z + 1) / 2) / 𝕢 24 z = cexp (-(π * I * z) / 24) := by
+    simp only [zeta48, Function.Periodic.qParam, ← Complex.exp_neg, ← Complex.exp_add,
+      ← Complex.exp_sub]
+    congr 1
+    push_cast
+    ring
+  have hq : 𝕢 24 z ≠ 0 := Complex.exp_ne_zero _
+  rw [weberF, eta_eq, eta_eq, e1, e4, hsplit, ← hodd, ← hconst]
+  field_simp
+
 end
 
 end ModularForm

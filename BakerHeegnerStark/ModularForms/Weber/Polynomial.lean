@@ -103,6 +103,34 @@ theorem jInvariant_two_mul_eq_weberF₂ (τ : UpperHalfPlane) :
   field_simp [weberF₂_ne_zero τ.im_pos]
   ring
 
+/-- The `j`-value at the half argument, expressed using the first Weber function. -/
+theorem jInvariant_half_eq_weberF₁ (τ : UpperHalfPlane) :
+    jInvariant (UpperHalfPlane.ofComplex ((τ : ℂ) / 2)) =
+      (weberF₁ τ ^ 24 + 256) ^ 3 / (weberF₁ τ ^ 24) ^ 2 := by
+  have hpos : 0 < ((τ : ℂ) / 2).im := by simpa using half_pos τ.im_pos
+  have hprod : weberF₁ τ ^ 24 * weberF₂ ((τ : ℂ) / 2) ^ 24 = 4096 := by
+    have h := weberF₁_two_mul_mul_weberF₂ hpos
+    rw [show 2 * ((τ : ℂ) / 2) = (τ : ℂ) by ring] at h
+    have hp := congrArg (fun x : ℂ ↦ x ^ 24) h
+    simpa only [mul_pow, ofReal_sqrt_two_pow_24] using hp
+  have hf := pow_ne_zero 24 (weberF₁_ne_zero τ.im_pos)
+  have hquot : weberF₂ ((τ : ℂ) / 2) ^ 24 = 4096 / weberF₁ τ ^ 24 :=
+    (eq_div_iff hf).mpr (by simpa only [mul_comm] using hprod)
+  rw [jInvariant_eq_weberF₂, UpperHalfPlane.ofComplex_apply_of_im_pos hpos, hquot]
+  field_simp [weberF₁_ne_zero τ.im_pos]
+  ring
+
+/-- The `j`-value at the shifted half argument, expressed using the shifted Weber function. -/
+theorem jInvariant_half_add_one_eq_weberF (τ : UpperHalfPlane) :
+    jInvariant (UpperHalfPlane.ofComplex (((τ : ℂ) + 1) / 2)) =
+      (256 - weberF τ ^ 24) ^ 3 / (weberF τ ^ 24) ^ 2 := by
+  have h := jInvariant_half_eq_weberF₁ ((1 : ℝ) +ᵥ τ)
+  simp only [UpperHalfPlane.coe_vadd, Complex.ofReal_one, add_comm (1 : ℂ),
+    weberF₁_add_one, mul_pow, inv_pow, zeta48_pow_24, inv_neg, inv_one, neg_mul,
+    one_mul] at h
+  rw [h]
+  ring
+
 end
 
 end ModularForm

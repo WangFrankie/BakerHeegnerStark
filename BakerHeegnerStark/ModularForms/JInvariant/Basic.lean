@@ -64,6 +64,18 @@ theorem mdifferentiable_jInvariant :
     MDifferentiable 𝓘(ℂ) 𝓘(ℂ) jInvariant :=
   (E₄.holo'.pow 3).div CuspForm.discriminant.holo' discriminant_ne_zero
 
+/-- The normalized cube root of j is holomorphic on the upper half-plane. -/
+theorem mdifferentiable_gamma₂ : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) gamma₂ := by
+  apply UpperHalfPlane.mdifferentiable_iff.mpr
+  have hE := UpperHalfPlane.mdifferentiable_iff.mp E₄.holo'
+  have hη : DifferentiableOn ℂ eta UpperHalfPlane.upperHalfPlaneSet :=
+    fun z hz => (differentiableAt_eta_of_mem_upperHalfPlaneSet hz).differentiableWithinAt
+  refine (hE.div (hη.pow 8) (fun z hz => pow_ne_zero _ (eta_ne_zero hz))).congr ?_
+  intro z hz
+  change E₄ (UpperHalfPlane.ofComplex z) / eta (UpperHalfPlane.ofComplex z : ℂ) ^ 8 =
+    E₄ (UpperHalfPlane.ofComplex z) / eta z ^ 8
+  rw [UpperHalfPlane.ofComplex_apply_of_im_pos hz]
+
 end
 
 end ModularForm
