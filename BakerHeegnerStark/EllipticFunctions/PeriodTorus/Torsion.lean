@@ -18,8 +18,8 @@ they are not a Smith-normal-form basis chosen up to an unspecified change.
 
 When `τ² = -m`, multiplication by `τ` descends to the actual period torus
 and its torsion, satisfies the same quadratic relation, and acts on these
-coordinate columns by `[[0,-m],[1,0]]`. This is the quadratic generator in
-`LinearAlgebra/Matrix/QuadraticCentralizer.lean`.
+coordinate columns by `[[0,-m],[1,0]]`. This is the trace-zero specialization
+of QNF's `QuadraticAlgebra.leftMulMatrix_eq`.
 
 These are analytic quotient-group statements. They do not identify the torus
 with the points of an algebraic elliptic curve, define its CM endomorphism

@@ -6,7 +6,7 @@ Authors: Frankie Wang
 
 import BakerHeegnerStark.EllipticCurves.CyclicIsogeny.KernelAction
 import BakerHeegnerStark.ModularForms.ModularPolynomial.Modularity
-import BakerHeegnerStark.LinearAlgebra.Matrix.QuadraticCentralizer
+import QNFMathlib.Algebra.QuadraticAlgebra.Matrix
 
 /-!
 # Modular right action in the prescribed cyclic-kernel coordinates
@@ -93,7 +93,11 @@ theorem periodCoordinateGL_commute_CM_iff {R : Type*} [CommRing R]
     (m : R) (A : GL (Fin 2) R) :
     Commute (periodCoordinateGL A : Matrix (Fin 2) (Fin 2) R) !![0, -m; 1, 0] ↔
       Commute (A : Matrix (Fin 2) (Fin 2) R) !![0, -m; 1, 0] := by
-  rw [Matrix.commute_quadratic_generator_iff, Matrix.commute_quadratic_generator_iff]
+  have hgen :
+      Algebra.leftMulMatrix (QuadraticAlgebra.basis (-m) 0) QuadraticAlgebra.omega =
+        !![0, -m; 1, 0] := by
+    simp [QuadraticAlgebra.leftMulMatrix_eq]
+  simp only [← hgen, QuadraticAlgebra.commute_leftMulMatrix_omega_iff, zero_mul, add_zero]
   change (A 0 1 = -m * A 1 0 ∧ A 0 0 = A 1 1) ↔
     (A 0 1 = -m * A 1 0 ∧ A 1 1 = A 0 0)
   exact and_congr Iff.rfl eq_comm

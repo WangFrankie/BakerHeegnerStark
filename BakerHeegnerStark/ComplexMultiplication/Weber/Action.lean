@@ -6,7 +6,8 @@ Authors: Frankie Wang
 
 import BakerHeegnerStark.ModularForms.Weber.Modularity
 import BakerHeegnerStark.ModularForms.Weber.CharacterTwentyFour
-import BakerHeegnerStark.LinearAlgebra.Matrix.QuadraticCentralizer
+import QNFMathlib.Algebra.QuadraticAlgebra.Matrix
+import QNFMathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Basic
 import BakerHeegnerStark.EllipticFunctions.Uniformization.TorsionMatrix
 
 /-!
@@ -135,11 +136,18 @@ theorem weberF_sq_smul_of_cm_centralizer_reduction (g : SL(2, ℤ)) (m : ZMod 24
     (hmod : Matrix.SpecialLinearGroup.map (Int.castRingHom (ZMod 24)) g =
       A.specialLinearPart) (τ : UpperHalfPlane) :
     weberF ((g • τ : UpperHalfPlane) : ℂ) ^ 2 = weberF (τ : ℂ) ^ 2 := by
-  have hn := Matrix.GeneralLinearGroup.norm_mul_inv_det_eq_one_of_commute m A hA
+  have hcomm : Commute (A : Matrix (Fin 2) (Fin 2) (ZMod 24))
+      (Algebra.leftMulMatrix (QuadraticAlgebra.basis (-m) 0) QuadraticAlgebra.omega) := by
+    simpa [QuadraticAlgebra.leftMulMatrix_eq] using hA
+  have hn : (A 0 0 ^ 2 + m * A 1 0 ^ 2) * (A.det.inv : ZMod 24) = 1 := by
+    simpa [QuadraticAlgebra.norm_def, pow_two, mul_assoc] using
+      (QuadraticAlgebra.norm_mul_inv_det_eq_one_of_commute_leftMulMatrix_omega A hcomm)
   apply weberF_sq_smul_of_cm_unit_reduction g m (A 0 0) (A 1 0) A.det.inv hn hm _ τ
   rw [hmod]
-  obtain ⟨h01, h11⟩ := (Matrix.commute_quadratic_generator_iff m
-    (A : Matrix (Fin 2) (Fin 2) (ZMod 24))).mp hA
+  obtain ⟨h01, h11⟩ :=
+    (QuadraticAlgebra.commute_leftMulMatrix_omega_iff
+      (a := -m) (b := 0) (A : Matrix (Fin 2) (Fin 2) (ZMod 24))).mp hcomm
+  simp only [zero_mul, add_zero] at h11
   ext i j
   fin_cases i <;> fin_cases j
   all_goals simp [Matrix.GeneralLinearGroup.specialLinearPart,

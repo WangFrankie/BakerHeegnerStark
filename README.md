@@ -80,14 +80,17 @@ import BakerHeegnerStark.ComplexMultiplication.Weber.ClassInvariant
 
 [QuadraticNumberFields](https://github.com/WangFrankie/QuadraticNumberFields)
 is pinned to
-[`00b38b46915b6c5cc267e43343bb346949f5017c`](https://github.com/WangFrankie/QuadraticNumberFields/commit/00b38b46915b6c5cc267e43343bb346949f5017c).
+[`a458ae67e9a10e91355afaebfdd55ecbceebc4bc`](https://github.com/WangFrankie/QuadraticNumberFields/commit/a458ae67e9a10e91355afaebfdd55ecbceebc4bc).
 It supplies quadratic fields, class groups, genus theory, binary quadratic
 forms, and the square-root suborder inclusion, additive index, and conductor
 in the half-integer order. BHS also reuses
 `ClassGroup.exists_integral_invertible_ideal` over arbitrary commutative domains
 and `Ideal.conductor_mul_mem_map` for arbitrary homomorphisms of commutative
-rings, rather than duplicating their proofs locally. Complex realizations,
-conductor-two ideal normalization, and CM applications remain in BHS.
+rings, rather than duplicating their proofs locally. Matrix calculations
+specialize QNF's general quadratic-algebra centralizer and norm API to the
+trace-zero CM generator and use its independent `GL₂` right normalization.
+Complex realizations, conductor-two ideal normalization, and CM applications
+remain in BHS.
 Exact dependency revisions are recorded in `lake-manifest.json`.
 
 The BHS application proofs and modular-function modules were extracted from

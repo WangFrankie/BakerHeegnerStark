@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Frankie Wang
 -/
 
-import BakerHeegnerStark.LinearAlgebra.Matrix.QuadraticCentralizer
+import QNFMathlib.Algebra.QuadraticAlgebra.Matrix
 import Mathlib.Data.ZMod.Basic
 
 /-!
@@ -49,9 +49,14 @@ theorem commute_CM_mod_twenty_four_iff_mod_three_eight
         !![0, -ZMod.castHom (by decide : 3 ∣ 24) (ZMod 3) m; 1, 0] ∧
       Commute (A.map (ZMod.castHom (by decide : 8 ∣ 24) (ZMod 8)))
         !![0, -ZMod.castHom (by decide : 8 ∣ 24) (ZMod 8) m; 1, 0] := by
-  rw [Matrix.commute_quadratic_generator_iff,
-    Matrix.commute_quadratic_generator_iff, Matrix.commute_quadratic_generator_iff]
-  simp only [Matrix.map_apply]
+  have hgen (N : ℕ) (n : ZMod N) :
+      Algebra.leftMulMatrix (QuadraticAlgebra.basis (-n) 0) QuadraticAlgebra.omega =
+        !![0, -n; 1, 0] := by
+    simp [QuadraticAlgebra.leftMulMatrix_eq]
+  simp only [← hgen 24 m,
+    ← hgen 3 (ZMod.castHom (by decide : 3 ∣ 24) (ZMod 3) m),
+    ← hgen 8 (ZMod.castHom (by decide : 8 ∣ 24) (ZMod 8) m),
+    QuadraticAlgebra.commute_leftMulMatrix_omega_iff, Matrix.map_apply, zero_mul, add_zero]
   constructor
   · rintro ⟨h₀₁, h₁₁⟩
     constructor <;> constructor <;> simp only [h₀₁, h₁₁, map_mul, map_neg]

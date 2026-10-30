@@ -71,7 +71,6 @@ import BakerHeegnerStark.EllipticFunctions.Weierstrass.TranslationAnalytic
 import BakerHeegnerStark.EllipticFunctions.Weierstrass.TranslationDifferential
 import BakerHeegnerStark.FieldTheory.AlgebraicOrbit
 import BakerHeegnerStark.LinearAlgebra.Matrix.CyclicLines
-import BakerHeegnerStark.LinearAlgebra.Matrix.QuadraticCentralizer
 import BakerHeegnerStark.ModularForms.CyclicSublattice.Action
 import BakerHeegnerStark.ModularForms.CyclicSublattice.Basic
 import BakerHeegnerStark.ModularForms.Gamma.Basic

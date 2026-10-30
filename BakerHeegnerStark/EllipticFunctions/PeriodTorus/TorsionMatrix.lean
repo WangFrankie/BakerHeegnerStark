@@ -5,7 +5,7 @@ Authors: Frankie Wang
 -/
 
 import BakerHeegnerStark.EllipticFunctions.PeriodTorus.Torsion
-import BakerHeegnerStark.LinearAlgebra.Matrix.QuadraticCentralizer
+import QNFMathlib.Algebra.QuadraticAlgebra.Matrix
 import Mathlib.Algebra.Module.ZMod
 import Mathlib.Algebra.Group.End
 
@@ -136,8 +136,11 @@ theorem periodTorsionCMEnd_commuting_auts_commute (τ : ℂ) (hτ : τ.im ≠ 0)
   apply (periodTorsionAutMatrix_bijective τ hτ N hN).injective
   rw [map_mul, map_mul]
   apply Units.ext
-  exact (Matrix.commute_of_commute_quadratic_generator (m : ZMod N)
-    ((periodTorsionAutMatrix_commute_iff τ hτ N hN m hm u).mpr hu)
-    ((periodTorsionAutMatrix_commute_iff τ hτ N hN m hm v).mpr hv)).eq
+  exact (QuadraticAlgebra.commute_of_commute_leftMulMatrix_omega
+    (a := -(m : ZMod N)) (b := 0)
+    (by simpa [QuadraticAlgebra.leftMulMatrix_eq] using
+      ((periodTorsionAutMatrix_commute_iff τ hτ N hN m hm u).mpr hu))
+    (by simpa [QuadraticAlgebra.leftMulMatrix_eq] using
+      ((periodTorsionAutMatrix_commute_iff τ hτ N hN m hm v).mpr hv))).eq
 
 end BakerHeegnerStark

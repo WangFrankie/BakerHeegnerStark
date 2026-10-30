@@ -7,6 +7,8 @@ Authors: Frankie Wang
 import Lean.Elab.BuiltinEvalCommand
 import Lean.Util.CollectAxioms
 import BakerHeegnerStark
+import QNFMathlib.Algebra.QuadraticAlgebra.Matrix
+import QNFMathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Basic
 
 /-!
 # Axiom Audit
@@ -543,7 +545,7 @@ run_cmd do
     ``BakerHeegnerStark.weierstrassPointGaloisAut_some,
     ``BakerHeegnerStark.weierstrassPointGaloisAut_some_eq_self_iff,
     ``BakerHeegnerStark.weierstrassTorsionGaloisAut_val,
-    ``Matrix.commute_of_commute_quadratic_generator,
+    ``QuadraticAlgebra.commute_of_commute_leftMulMatrix_omega,
     ``BakerHeegnerStark.periodTorsionAutMatrix,
     ``BakerHeegnerStark.periodTorsionAutMatrix_mulVec,
     ``BakerHeegnerStark.periodTorsionAutMatrix_apply,
@@ -568,12 +570,14 @@ run_cmd do
     ``BakerHeegnerStark.periodTorsionCMEnd_eq_matrix,
     ``BakerHeegnerStark.nat_card_periodTorsion,
     ``BakerHeegnerStark.periodTorusCMEnd_sq,
-    ``Matrix.commute_quadratic_generator_iff,
-    ``Matrix.det_of_commute_quadratic_generator,
+    ``QuadraticAlgebra.commute_leftMulMatrix_omega_iff,
+    ``QuadraticAlgebra.leftMulMatrix_eq_of_commute,
+    ``QuadraticAlgebra.commute_leftMulMatrix_omega_iff_existsUnique,
+    ``QuadraticAlgebra.det_eq_norm_of_commute_leftMulMatrix_omega,
     ``Matrix.GeneralLinearGroup.specialLinearPart,
     ``Matrix.GeneralLinearGroup.specialLinearPart_mul_diagonal_det,
-    ``Matrix.GeneralLinearGroup.det_val_of_commute_quadratic_generator,
-    ``Matrix.GeneralLinearGroup.norm_mul_inv_det_eq_one_of_commute,
+    ``QuadraticAlgebra.det_leftMulMatrix,
+    ``QuadraticAlgebra.norm_mul_inv_det_eq_one_of_commute_leftMulMatrix_omega,
     ``ModularForm.weberF_sq_smul_of_cm_centralizer_reduction,
     ``BakerHeegnerStark.weberClassInvariant,
     ``BakerHeegnerStark.classNumberOneClassification,

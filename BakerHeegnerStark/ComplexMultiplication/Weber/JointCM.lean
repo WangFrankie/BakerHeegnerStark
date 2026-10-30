@@ -7,6 +7,7 @@ Authors: Frankie Wang
 import BakerHeegnerStark.ComplexMultiplication.Weber.JointPolynomial
 import BakerHeegnerStark.ComplexMultiplication.Gamma.Values
 import BakerHeegnerStark.FieldTheory.AlgebraicOrbit
+import QNFMathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Basic
 
 /-!
 # CM specialization of the actual Weber joint polynomial
