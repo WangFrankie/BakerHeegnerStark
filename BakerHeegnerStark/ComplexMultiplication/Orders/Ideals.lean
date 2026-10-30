@@ -74,27 +74,6 @@ theorem ideal_complex_images_homothetic_of_class_eq {R : Type*} [CommRing R] [Is
       rw [himages]
     _ = _ := by rw [smul_smul, inv_mul_cancel₀ hfs, one_smul]
 
-/-- Every class has an actual integral ideal representative that is invertible
-as a fractional ideal, without assuming that the order is Dedekind. -/
-theorem classGroup_exists_integral_invertible_ideal {R : Type*} [CommRing R] [IsDomain R]
-    (c : ClassGroup R) :
-    ∃ (A : Ideal R) (I : (FractionalIdeal R⁰ (FractionRing R))ˣ),
-      (I : FractionalIdeal R⁰ (FractionRing R)) = A ∧
-        ClassGroup.mk (FractionRing R) I = c := by
-  classical
-  refine ClassGroup.induction (FractionRing R) (fun I => ?_) c
-  have hunit := FractionalIdeal.isUnit_num.mpr I.isUnit
-  refine ⟨(I : FractionalIdeal R⁰ (FractionRing R)).num, hunit.unit,
-    hunit.unit_spec, ?_⟩
-  symm
-  apply ClassGroup.mk_eq_mk.mpr
-  have hden : algebraMap R (FractionRing R) (I : FractionalIdeal R⁰ (FractionRing R)).den ≠ 0 :=
-    IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors (SetLike.coe_mem _)
-  refine ⟨Units.mk0 _ hden, ?_⟩
-  apply Units.ext
-  rw [Units.val_mul, coe_toPrincipalIdeal, Units.val_mk0, hunit.unit_spec, mul_comm]
-  exact FractionalIdeal.den_mul_self_eq_num' R⁰ (FractionRing R) I
-
 /-- An actual invertible integral ideal has precisely the original order as
 scalar multiplier ring in any faithful complex realization. No Dedekind-domain
 hypothesis is needed: cancellation uses its fractional-ideal inverse. -/

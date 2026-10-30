@@ -7,6 +7,7 @@ Authors: Frankie Wang
 import BakerHeegnerStark.ComplexMultiplication.Orders.IntegerLattice
 import BakerHeegnerStark.ComplexMultiplication.Orders.Ideals
 import BakerHeegnerStark.ComplexMultiplication.Orders.ConductorTwoLattices
+import QNFMathlib.RingTheory.Ideal.Maps
 
 /-!
 # Conductor-Two Normalization of Actual Ideals
@@ -21,34 +22,6 @@ hypothesis, not an assumed list of small-order classes.
 namespace BakerHeegnerStark
 
 open scoped Pointwise nonZeroDivisors
-
-/-- A conductor element carries an extended ideal into the original ideal's
-image, even when the extension homomorphism is not surjective. -/
-theorem conductor_mul_mem_ideal_map {R S : Type*} [CommRing R] [CommRing S]
-    (j : R →+* S) (c : S) (hc : ∀ s : S, c * s ∈ j.range)
-    (A : Ideal R) (y : S) (hy : y ∈ Ideal.map j A) :
-    ∃ x ∈ A, j x = c * y := by
-  have hstrong : ∀ w : S, ∃ x ∈ A, j x = c * w * y := by
-    refine Submodule.span_induction (hx := hy) ?_ ?_ ?_ ?_
-    · rintro z ⟨a, ha, rfl⟩ w
-      obtain ⟨r, hr⟩ := hc w
-      refine ⟨r * a, A.mul_mem_left r ha, ?_⟩
-      rw [map_mul, hr]
-    · intro w
-      exact ⟨0, A.zero_mem, by simp⟩
-    · intro z t hz ht ihz iht w
-      obtain ⟨a, ha, hea⟩ := ihz w
-      obtain ⟨b, hb, heb⟩ := iht w
-      refine ⟨a + b, A.add_mem ha hb, ?_⟩
-      rw [map_add, hea, heb]
-      ring
-    · intro s z hz ih w
-      obtain ⟨a, ha, hea⟩ := ih (w * s)
-      refine ⟨a, ha, ?_⟩
-      rw [hea]
-      simp only [smul_eq_mul]
-      ring
-  simpa only [mul_one] using hstrong 1
 
 /-- A principal extension normalizes every nonzero integral ideal image into
 the actual conductor interval in the complex plane. -/
@@ -85,7 +58,7 @@ theorem ideal_complex_image_normalization {R S : Type*} [CommRing R] [CommRing S
   · intro z hz
     obtain ⟨w, hw, rfl⟩ := (Submodule.mem_smul_pointwise_iff_exists _ _ _).mp hz
     obtain ⟨t, ht, rfl⟩ := Submodule.mem_map.mp hw
-    obtain ⟨r, hr, her⟩ := conductor_mul_mem_ideal_map j.toRingHom c hc A (a * t)
+    obtain ⟨r, hr, her⟩ := Ideal.conductor_mul_mem_map j.toRingHom c hc A (a * t)
       (B.mul_mem_right t haB)
     change j r = c * (a * t) at her
     apply (Submodule.mem_smul_pointwise_iff_exists _ _ _).mpr

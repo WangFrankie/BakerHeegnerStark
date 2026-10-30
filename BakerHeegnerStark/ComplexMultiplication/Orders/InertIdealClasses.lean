@@ -6,6 +6,7 @@ Authors: Frankie Wang
 
 import BakerHeegnerStark.ComplexMultiplication.Orders.InertLattices
 import BakerHeegnerStark.ComplexMultiplication.Orders.ConductorTwoIdeals
+import QNFMathlib.RingTheory.ClassGroup
 
 /-!
 # Ideal Classes in the Inert Family
@@ -130,7 +131,7 @@ theorem inert_sqrtOrderClasses_exhaustive (p : ℕ) (hp8 : p % 8 = 3)
         (sqrtOrderIdeals_isUnit p hp8).1.unit ∨
       c = ClassGroup.mk (FractionRing (QuadraticNumberFields.Zsqrtd (-(p : ℤ))))
         (sqrtOrderIdeals_isUnit p hp8).2.unit := by
-  obtain ⟨A, I, hI, hc⟩ := classGroup_exists_integral_invertible_ideal c
+  obtain ⟨A, I, hI, hc⟩ := ClassGroup.exists_integral_invertible_ideal c
   rw [← hc]
   let k : ℤ := (-(p : ℤ) - 1) / 4
   have hk : -(p : ℤ) = 1 + 4 * k := by dsimp only [k]; omega
