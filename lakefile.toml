@@ -13,7 +13,7 @@ maxSynthPendingDepth = 3
 [[require]]
 name = "QuadraticNumberFields"
 git = "https://github.com/WangFrankie/QuadraticNumberFields.git"
-rev = "196dd48b3439cc731397fd2cf9b8ac48da211a22"
+rev = "488fea0878375d11afc8bc50d48f66fc0f18400a"
 
 [[lean_lib]]
 name = "BakerHeegnerStark"

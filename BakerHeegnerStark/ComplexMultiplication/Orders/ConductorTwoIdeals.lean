@@ -118,13 +118,17 @@ theorem sqrtOrderIdeal_complex_image_normalization (p : ℕ) (k : ℤ)
       α • Submodule.map (sqrtOrderEmbedding p).toLinearMap (A.restrictScalars ℤ) ≤
         periodModule ((1 + (Real.sqrt (p : ℝ) : ℂ) * Complex.I) / 2) := by
   have := halfOrder_isPrincipalIdealRing_of_classNumber_eq_one p k hk hclass
-  let j := sqrtOrderToHalfOrder p k hk
+  let j := ZOnePlusSqrtdOverTwo.fromZsqrtd k hk
   let g := halfOrderEmbedding p k hk
   have hc : ∀ s : ZOnePlusSqrtdOverTwo k, (2 : ZOnePlusSqrtdOverTwo k) * s ∈
-      j.toRingHom.range :=
-    (halfOrder_conductor_iff_mem_two p k hk 2).mpr (Ideal.subset_span (by simp))
+      j.toRingHom.range := by
+    change ∀ s, (2 : ZOnePlusSqrtdOverTwo k) * s ∈
+      (ZOnePlusSqrtdOverTwo.fromZsqrtd k hk).range
+    rw [ZOnePlusSqrtdOverTwo.range_fromZsqrtd, ← mem_conductor_iff,
+      ZOnePlusSqrtdOverTwo.conductor_eq_span_two]
+    exact Ideal.subset_span (by simp)
   have hcomp : g.comp j = sqrtOrderEmbedding p :=
-    AlgHom.ext fun x => halfOrderEmbedding_comp_sqrtOrderToHalfOrder p k hk x
+    AlgHom.ext fun x => halfOrderEmbedding_comp_fromZsqrtd p k hk x
   have hlarge : Submodule.map g.toLinearMap (⊤ : Submodule ℤ (ZOnePlusSqrtdOverTwo k)) =
       periodModule ((1 + (Real.sqrt (p : ℝ) : ℂ) * Complex.I) / 2) := by
     ext z
@@ -136,7 +140,8 @@ theorem sqrtOrderIdeal_complex_image_normalization (p : ℕ) (k : ℤ)
       obtain ⟨x, hx⟩ := (mem_halfOrderEmbedding_range_iff p k hk _).mpr hz
       exact Submodule.mem_map.mpr ⟨x, by simp, hx⟩
   obtain ⟨α, hα, hlo, hhi⟩ := ideal_complex_image_normalization j g
-    (sqrtOrderToHalfOrder_injective p k hk) (halfOrderEmbedding_injective p k hk) 2 hc A hA
+    (ZOnePlusSqrtdOverTwo.fromZsqrtd_injective k hk) (halfOrderEmbedding_injective p k hk)
+    2 hc A hA
   refine ⟨α, hα, ?_, ?_⟩
   · simpa only [map_ofNat, hlarge, hcomp] using hlo
   · simpa only [hlarge, hcomp] using hhi

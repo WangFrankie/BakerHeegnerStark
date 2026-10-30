@@ -80,18 +80,23 @@ import BakerHeegnerStark.ComplexMultiplication.Weber.ClassInvariant
 
 [QuadraticNumberFields](https://github.com/WangFrankie/QuadraticNumberFields)
 is pinned to
-[`196dd48b3439cc731397fd2cf9b8ac48da211a22`](https://github.com/WangFrankie/QuadraticNumberFields/commit/196dd48b3439cc731397fd2cf9b8ac48da211a22),
-preserved on `legacy/baker-heegner-stark`. It supplies quadratic fields,
-class groups, genus theory, and binary quadratic forms. Exact dependency
-revisions are recorded in `lake-manifest.json`.
+[`488fea0878375d11afc8bc50d48f66fc0f18400a`](https://github.com/WangFrankie/QuadraticNumberFields/commit/488fea0878375d11afc8bc50d48f66fc0f18400a).
+It supplies quadratic fields, class groups, genus theory, binary quadratic
+forms, and the square-root suborder inclusion, additive index, and conductor
+in the half-integer order. The local complex realizations use these upstream
+order results directly. Exact dependency revisions are recorded in
+`lake-manifest.json`.
 
-The extracted BHS application proofs and modular-function modules retain their
-original proofs, authorship, copyright, and source references. The local
-analytic layer depends only on mathlib and itself; the full classification
-also uses QNF arithmetic and form theory.
+The BHS application proofs and modular-function modules were extracted from
+QNF commit
+[`196dd48b3439cc731397fd2cf9b8ac48da211a22`](https://github.com/WangFrankie/QuadraticNumberFields/commit/196dd48b3439cc731397fd2cf9b8ac48da211a22),
+preserved on `legacy/baker-heegner-stark`. They retain their original proofs,
+authorship, copyright, and source references. The local analytic layer depends
+only on mathlib and itself; the full classification also uses QNF arithmetic
+and form theory.
 
 Import the local analytic results through `BakerHeegnerStark.*`, not their
-historical `QNFMathlib.NumberTheory.ModularForms.*` copies: mixing them causes
-duplicate declarations in the `ModularForm` namespace.
+historical `QNFMathlib.NumberTheory.ModularForms.*` copies in the preserved
+snapshot: mixing them causes duplicate declarations in the `ModularForm` namespace.
 
 Licensed under Apache 2.0; see [LICENSE](LICENSE).
