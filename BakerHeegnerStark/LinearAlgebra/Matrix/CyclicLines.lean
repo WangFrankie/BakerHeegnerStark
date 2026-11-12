@@ -14,9 +14,9 @@ import Mathlib.Tactic.FinCases
 The coordinate vectors and their sum give three cyclic lines whose common
 matrix stabilizer consists of scalars. Invertibility forces that scalar to
 be a unit. Applied to a relative action, this identifies two invertible
-actions up to a unit scalar without any field or reduced-ring hypothesis.
-In particular it applies to the actual residue rings at levels three and
-eight, not just prime levels.
+actions up to a unit scalar over any commutative semiring, without additive
+inverses, field, nontriviality, or reducedness assumptions. In particular this
+applies to the actual residue rings at levels three and eight, not just prime levels.
 -/
 
 open scoped MatrixGroups
@@ -24,8 +24,8 @@ open scoped MatrixGroups
 namespace BakerHeegnerStark
 
 /-- A two-by-two matrix preserving the two coordinate cyclic lines and their
-sum line is scalar, over an arbitrary commutative ring. -/
-theorem matrix_eq_scalar_of_preserves_three_lines {R : Type*} [CommRing R]
+sum line is scalar, over an arbitrary commutative semiring. -/
+theorem matrix_eq_scalar_of_preserves_three_lines {R : Type*} [CommSemiring R]
     (A : Matrix (Fin 2) (Fin 2) R)
     (h₁ : A.mulVec ![1, 0] ∈ Submodule.span R {![1, 0]})
     (h₂ : A.mulVec ![0, 1] ∈ Submodule.span R {![0, 1]})
@@ -51,7 +51,7 @@ theorem matrix_eq_scalar_of_preserves_three_lines {R : Type*} [CommRing R]
 /-- For an invertible matrix, the scalar supplied by the three cyclic lines
 is a genuine unit, including over composite residue rings. -/
 theorem generalLinearGroup_eq_unit_scalar_of_preserves_three_lines
-    {R : Type*} [CommRing R] (A : GL (Fin 2) R)
+    {R : Type*} [CommSemiring R] (A : GL (Fin 2) R)
     (h₁ : (A : Matrix (Fin 2) (Fin 2) R).mulVec ![1, 0] ∈
       Submodule.span R {![1, 0]})
     (h₂ : (A : Matrix (Fin 2) (Fin 2) R).mulVec ![0, 1] ∈
@@ -75,7 +75,7 @@ theorem generalLinearGroup_eq_unit_scalar_of_preserves_three_lines
 /-- Two invertible actions with a three-line-preserving relative action
 agree up to a unit scalar. -/
 theorem generalLinearGroup_eq_unit_smul_of_inv_mul_preserves_three_lines
-    {R : Type*} [CommRing R] (A B : GL (Fin 2) R)
+    {R : Type*} [CommSemiring R] (A B : GL (Fin 2) R)
     (h₁ : ((B⁻¹ * A : GL (Fin 2) R) : Matrix (Fin 2) (Fin 2) R).mulVec ![1, 0] ∈
       Submodule.span R {![1, 0]})
     (h₂ : ((B⁻¹ * A : GL (Fin 2) R) : Matrix (Fin 2) (Fin 2) R).mulVec ![0, 1] ∈
@@ -92,8 +92,6 @@ theorem generalLinearGroup_eq_unit_smul_of_inv_mul_preserves_three_lines
     ((B⁻¹ * A : GL (Fin 2) R) : Matrix (Fin 2) (Fin 2) R) = A at hi
   rw [hu] at hi
   refine ⟨u, hi.symm.trans ?_⟩
-  ext i j
-  fin_cases i <;> fin_cases j <;>
-    simp [Matrix.mul_apply, Fin.sum_univ_two, mul_comm]
+  simp only [Matrix.mul_smul, Matrix.mul_one]
 
 end BakerHeegnerStark

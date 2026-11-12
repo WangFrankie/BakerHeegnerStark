@@ -76,6 +76,30 @@ import BakerHeegnerStark.ComplexMultiplication.Weber.ClassInvariant
 
 `import BakerHeegnerStark` imports the complete library.
 
+### Reusable proof tools
+
+- `Algebra/Polynomial/Separating.lean` separates finite polynomial families by
+  evaluation in any infinite subset of an integral domain. Natural-number
+  evaluation and power weights require characteristic zero, but not a field.
+- `FieldTheory/AlgebraicConjugates.lean` bounds a simple extension's degree by
+  a finite set containing its minimal-polynomial roots. Separability and
+  splitting in the chosen extension are explicit; characteristic zero and
+  an algebraically closed ambient field are not required.
+- `LinearAlgebra/Matrix/CyclicLines.lean` identifies three-line-preserving
+  matrices as scalars over commutative semirings. Invertibility makes the
+  scalar a unit, including over composite residue rings.
+- `ModularForms/QExpansion/Polynomial.lean` descends polynomial coefficients
+  through full q-regularization over a finite Galois field tower. Ordinary,
+  gamma, and joint Weber rationality reuse this kernel; their actual series,
+  phase calculations, and Galois reindexing remain separate proofs.
+- `ComplexMultiplication/Orders/ConductorTwoIdeals.lean` normalizes a nonzero
+  ideal assuming only that its extension is principal. A principal ideal
+  ring hypothesis is used only in the arithmetic specialization.
+- `EllipticCurves/Weierstrass/Galois.lean` restricts the coefficient action
+  using `AddEquiv.torsionByEquiv`, at every torsion level including zero.
+- `ClassNumberOne/IdealReductions.lean` reuses QNF's prime-norm lemmas for
+  the ramified and split norm-two reductions.
+
 ## Dependencies and provenance
 
 [QuadraticNumberFields](https://github.com/WangFrankie/QuadraticNumberFields)

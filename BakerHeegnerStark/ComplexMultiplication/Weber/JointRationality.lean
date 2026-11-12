@@ -10,10 +10,10 @@ import BakerHeegnerStark.ComplexMultiplication.Weber.JointQExpansion
 # Rational trivariate representation of the actual joint polynomial
 
 The entire paired q-product is defined over the actual finite Galois phase
-field and is fixed under its actual automorphisms. Unit triangular width-24
-regularization transfers this formal fixedness to every bounded-degree
-coefficient polynomial in `j`. Finite Galois descent then gives a rational
-trivariate polynomial, without specializing the tuple-separating variable.
+field and is fixed under its actual automorphisms. The shared finite-Galois
+q-regularization descent theorem transfers this width-24 formal fixedness to
+every bounded-degree coefficient polynomial in `j`, giving a rational
+trivariate polynomial without specializing the tuple-separating variable.
 -/
 
 open UpperHalfPlane Polynomial BakerHeegnerStark
@@ -46,45 +46,18 @@ theorem exists_rational_polynomial_weberJointPolynomial_repr
   have hreg : P.qRegularization (PowerSeries.map f J) 24 n = PowerSeries.map f A := by
     rw [hmapJ]
     exact qRegularization_weberJointPolynomial_repr a k l P hdeg hrep
-  obtain ⟨PK, hPK⟩ := Polynomial.exists_map_of_qRegularization_eq_map
-    f P J hJ 24 n (by decide) hdeg A hreg
-  have hdegK : PK.natDegree ≤ n := by
-    rw [← Polynomial.natDegree_map_eq_of_injective f.injective PK, hPK]
-    exact hdeg
-  have hregK : PK.qRegularization J 24 n = A := by
-    apply PowerSeries.map_injective f f.injective
-    calc
-      PowerSeries.map f (PK.qRegularization J 24 n) =
-          (PK.map f).qRegularization (PowerSeries.map f J) 24 n :=
-        (Polynomial.qRegularization_map PK J 24 n f).symm
-      _ = PowerSeries.map f A := by rw [hPK, hreg]
-  have hfixed (σ : K ≃ₐ[ℚ] K) : PK.map σ.toRingHom = PK := by
-    have hσJ : PowerSeries.map σ.toRingHom J = J := by
-      rw [PowerSeries.map_expand]
-      congr 1
-      ext m
-      simp
-    have hσA : PowerSeries.map σ.toRingHom A = A := by
-      have hm := congrArg
-        (fun p : (PowerSeries K)[X][X] => (p.coeff k).coeff l)
-        (map_weberJointQPolynomial_eq_self a σ)
-      simpa only [Polynomial.coeff_map, Polynomial.coe_mapRingHom, A] using hm
-    apply Polynomial.map_eq_of_qRegularization_fixed PK J hJ 24 n (by decide)
-      hdegK σ.toRingHom hσJ
-    rw [hregK]
-    exact hσA
-  have hcoeff : ∀ i, PK.coeff i ∈ (algebraMap ℚ K).range := by
-    intro i
-    apply (IsGalois.mem_range_algebraMap_iff_fixed (F := ℚ) (E := K) (PK.coeff i)).mpr
-    intro σ
-    have hm := congrArg (fun p : K[X] => p.coeff i) (hfixed σ)
-    rw [Polynomial.coeff_map] at hm
-    exact hm
-  obtain ⟨Q, hQ⟩ : ∃ Q : ℚ[X], Q.map (algebraMap ℚ K) = PK :=
-    (Polynomial.mem_map_range (algebraMap ℚ K)).mpr hcoeff
-  refine ⟨Q, ?_⟩
-  rw [IsScalarTower.algebraMap_eq ℚ K ℂ, ← Polynomial.map_map, hQ]
-  exact hPK
+  have hfixedJ (σ : K ≃ₐ[ℚ] K) : PowerSeries.map σ.toRingHom J = J := by
+    rw [PowerSeries.map_expand]
+    congr 1
+    ext m
+    simp
+  have hfixedA (σ : K ≃ₐ[ℚ] K) : PowerSeries.map σ.toRingHom A = A := by
+    have hm := congrArg
+      (fun p : (PowerSeries K)[X][X] => (p.coeff k).coeff l)
+      (map_weberJointQPolynomial_eq_self a σ)
+    simpa only [Polynomial.coeff_map, Polynomial.coe_mapRingHom, A] using hm
+  exact Polynomial.exists_map_of_fixed_qRegularization
+    P J A hJ 24 n (by decide) hdeg hreg hfixedJ hfixedA
 
 /-- The actual full joint root product has one rational trivariate
 representation valid throughout `ℍ`. The innermost variable is evaluated at

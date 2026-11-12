@@ -16,9 +16,10 @@ A rational bivariate realization of the actual twisted cyclic-sublattice
 products suffices for Weber's cube-root rationality theorem. At a shifted CM
 point, the square of gamma is a common root of one such specialization and
 `Z³ - j²`. Every conjugate over the actual j-generated field remains a common
-root. The exact CM-root theorem makes all these conjugates equal, so their
-simple extension has degree one. Dividing `j = gamma³` by the gamma square
-then recovers gamma itself, with its zero value handled separately.
+root. The exact CM-root theorem makes all these conjugates equal; using
+characteristic-zero separability and splitting over `ℂ`, their simple extension
+therefore has degree one. Dividing `j = gamma³` by the gamma square then recovers
+gamma itself, with its zero value handled separately.
 -/
 
 open ModularForm Polynomial IntermediateField
@@ -91,9 +92,11 @@ theorem gammaTwoRationality_of_rational_gammaModularPolynomial
     have hxeq : x = α :=
       eq_gamma₂_cmPointShift_sq_of_isRoot_of_cube hm hm4 (by omega) hN3 hxroot hcube
     simpa only [Finset.mem_singleton] using hxeq
+  have hsep : (minpoly K α).Separable := (minpoly.irreducible hα).separable
+  have hsplit : ((minpoly K α).map (algebraMap K ℂ)).Splits := IsAlgClosed.splits _
   have hle : Module.finrank K K⟮α⟯ ≤ 1 := by
     simpa only [Finset.card_singleton] using
-      finrank_adjoin_le_card_of_minpoly_roots_subset α hα {α} hroots
+      finrank_adjoin_le_card_of_minpoly_roots_subset α hα hsep hsplit {α} hroots
   letI : FiniteDimensional K K⟮α⟯ := IntermediateField.adjoin.finiteDimensional hα
   have hpos : 0 < Module.finrank K K⟮α⟯ := Module.finrank_pos
   have hdegree : Module.finrank K K⟮α⟯ = 1 := by omega

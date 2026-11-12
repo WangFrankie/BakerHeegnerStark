@@ -24,7 +24,8 @@ This file collects small ideal-first reductions used in the class-number-one
 direction of the Baker--Heegner--Stark theorem.  The first reduction isolates
 the elementary norm obstruction in the even-discriminant branch and the
 odd-discriminant prime-shape reduction used by the Baker-Heegner-Stark forward
-direction.
+direction. Prime-ideal norms in the ramified and split branches use QNF's
+splitting norm API.
 -/
 
 open scoped NumberField
@@ -44,11 +45,6 @@ private theorem int_sq_ne_nat_prime {p : ℕ} (hp : p.Prime) (a : ℤ) :
 
 private theorem int_sq_ne_two (a : ℤ) : a ^ 2 ≠ 2 := by
   exact int_sq_ne_nat_prime Nat.prime_two a
-
-private theorem nat_eq_two_of_sq_eq_four {n : ℕ} (h : 4 = n ^ 2) (hn : n ≠ 0) :
-    n = 2 := by
-  have hnle : n ≤ 4 := by nlinarith [sq_nonneg (n : ℤ)]
-  interval_cases n <;> simp_all
 
 private theorem eq_neg_one_or_eq_neg_two_of_zsqrtd_norm_eq_two
     {d : ℤ} (hdneg : d < 0) {z : QuadraticNumberFields.Zsqrtd d}
@@ -151,7 +147,7 @@ theorem exists_algebraNorm_natAbs_eq_two_of_classNumber_eq_one_of_mod_four_ne_on
       ((Nat.prime_iff_prime_int.mp Nat.prime_two).irreducible)
   have hram : Ideal.IsRamifiedIn p O := by
     simpa [p, O] using Splitting.isRamified_two_of_mod_four_ne_one d hd4
-  obtain ⟨P, hPover, hmap⟩ := Ideal.map_eq_sq_of_isRamifiedIn p O hchar hpbot hram
+  obtain ⟨P, hPover, _hmap⟩ := Ideal.map_eq_sq_of_isRamifiedIn p O hchar hpbot hram
   have hP_principal : P.IsPrincipal := by
     have hPID : IsPrincipalIdealRing O :=
       (NumberField.classNumber_eq_one_iff (K := Qsqrtd (d : ℚ))).mp hclass
@@ -161,24 +157,10 @@ theorem exists_algebraNorm_natAbs_eq_two_of_classNumber_eq_one_of_mod_four_ne_on
     RingOfIntegers.absNorm_eq_natAbs_algebraNorm_of_isPrincipal (d := d) hP_principal
   refine ⟨α, ?_⟩
   have hP_abs : Ideal.absNorm P = 2 := by
-    have hnorm_map := congrArg Ideal.absNorm hmap
-    have hleft : Ideal.absNorm (Ideal.map (algebraMap ℤ O) p) = 4 := by
-      dsimp [p]
-      rw [Ideal.map_span, Set.image_singleton]
-      simpa using RingOfIntegers.absNorm_span_intCast (d := d) 2
-    have hright : Ideal.absNorm (P ^ 2) = Ideal.absNorm P ^ 2 := by
-      simp
-    rw [hleft, hright] at hnorm_map
-    have hPne : Ideal.absNorm P ≠ 0 := by
-      rw [Ne, Ideal.absNorm_eq_zero_iff]
-      intro hPbot
-      letI : P.LiesOver p := hPover.2
-      have hover : p = Ideal.under ℤ P := Ideal.LiesOver.over
-      have hunder : Ideal.under ℤ P = ⊥ := by
-        rw [hPbot]
-        exact Ideal.comap_bot_of_injective (algebraMap ℤ O) (RingHom.injective_int _)
-      exact hpbot (hover.trans hunder)
-    exact nat_eq_two_of_sq_eq_four hnorm_map hPne
+    letI : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
+    letI : P.IsPrime := hPover.1
+    letI : P.LiesOver (Ideal.span ({(2 : ℤ)} : Set ℤ)) := hPover.2
+    exact Splitting.absNorm_eq_prime_of_liesOver_of_isRamifiedIn d 2 hram
   exact hnorm.symm.trans hP_abs
 
 /-- In the `d % 8 = 1` split branch, class number one forces a norm-`2`
@@ -205,17 +187,6 @@ theorem exists_algebraNorm_natAbs_eq_two_of_classNumber_eq_one_of_mod_eight_eq_o
     simpa [p, O] using Splitting.isSplit_two_of_mod_eight_eq_one (d := d) hd8
   obtain ⟨P, hP, _P2, _hP2, _hne, _hmap⟩ :=
     Ideal.map_eq_of_isSplitIn p O hchar hpbot hsplit
-  have hPover_span : P.LiesOver (Ideal.span ({(2 : ℤ)} : Set ℤ)) := by
-    simpa [p] using hP.2
-  letI : P.LiesOver (Ideal.span ({(2 : ℤ)} : Set ℤ)) := hPover_span
-  have hfP : P.inertiaDeg ℤ = 1 := by
-    letI := Ring.instAlgebraFractionRing
-    letI := IsIntegralClosure.MulSemiringAction ℤ (FractionRing ℤ) (FractionRing O) O
-    letI := Algebra.IsQuadraticExtension.isGaloisGroup (R := ℤ) (S := O) hchar
-    have hf := Ideal.inertiaDegIn_eq_of_mem p O Gal(FractionRing O / FractionRing ℤ) hP
-    have hf1 : Ideal.inertiaDegIn p O = 1 := hsplit.2
-    rw [hf1] at hf
-    simpa [p] using hf.symm
   have hP_principal : P.IsPrincipal := by
     have hPID : IsPrincipalIdealRing O :=
       (NumberField.classNumber_eq_one_iff (K := Qsqrtd (d : ℚ))).mp hclass
@@ -226,10 +197,8 @@ theorem exists_algebraNorm_natAbs_eq_two_of_classNumber_eq_one_of_mod_eight_eq_o
   refine ⟨α, ?_⟩
   have hP_abs : Ideal.absNorm P = 2 := by
     letI : P.IsPrime := hP.1
-    have hnormP := Ideal.pow_inertiaDeg 2 P
-    rw [hfP] at hnormP
-    norm_num at hnormP
-    exact hnormP.symm
+    letI : P.LiesOver (Ideal.span ({(2 : ℤ)} : Set ℤ)) := hP.2
+    exact Splitting.absNorm_eq_prime_of_liesOver_of_isSplitIn d 2 hsplit
   exact hnorm.symm.trans hP_abs
 
 /-- If a rational prime `q` divides the squarefree parameter `d`, then class

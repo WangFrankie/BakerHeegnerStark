@@ -5,7 +5,7 @@ Authors: Frankie Wang
 -/
 
 import Mathlib.AlgebraicGeometry.EllipticCurve.Affine.Point
-import Mathlib.Algebra.Module.Torsion.Basic
+import BakerHeegnerStark.EllipticCurves.Torsion
 import Mathlib.Algebra.Group.End
 import Mathlib.FieldTheory.Galois.Infinite
 
@@ -67,18 +67,8 @@ abbrev WeierstrassTorsion (W : WeierstrassCurve.Affine K) (F : Type*)
 /-- The coefficient Galois action restricts to the actual `N`-torsion subgroup. -/
 noncomputable def weierstrassTorsionGaloisAut (W : WeierstrassCurve.Affine K) (N : ℕ) :
     (L ≃ₐ[K] L) →* Multiplicative (AddAut (WeierstrassTorsion W L N)) where
-  toFun σ :=
-    let e := (weierstrassPointGaloisAut W σ).toAdd
-    Multiplicative.ofAdd
-      { toFun P := ⟨e P, by
-          apply AddSubgroup.torsionBy.nsmul_iff.mpr
-          rw [← map_nsmul, AddSubgroup.torsionBy.nsmul_iff.mp P.property, map_zero]⟩
-        invFun P := ⟨e.symm P, by
-          apply AddSubgroup.torsionBy.nsmul_iff.mpr
-          rw [← map_nsmul, AddSubgroup.torsionBy.nsmul_iff.mp P.property, map_zero]⟩
-        left_inv := by intro P; apply Subtype.ext; exact e.symm_apply_apply _
-        right_inv := by intro P; apply Subtype.ext; exact e.apply_symm_apply _
-        map_add' P Q := by apply Subtype.ext; exact map_add e (P : (W.baseChange L).Point) (Q : (W.baseChange L).Point) }
+  toFun σ := Multiplicative.ofAdd
+    ((weierstrassPointGaloisAut W σ).toAdd.torsionByEquiv (N : ℤ))
   map_one' := by
     change (_ : AddAut (WeierstrassTorsion W L N)) = _
     apply AddEquiv.ext
