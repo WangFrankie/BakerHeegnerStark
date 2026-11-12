@@ -6,6 +6,7 @@ Authors: Frankie Wang
 
 import Mathlib.RingTheory.PowerSeries.Basic
 import Mathlib.Algebra.Polynomial.Eval.Subring
+import Mathlib.FieldTheory.Galois.Basic
 
 /-!
 # Coefficient Descent from Regularized q-Expansions
@@ -13,7 +14,9 @@ import Mathlib.Algebra.Polynomial.Eval.Subring
 If `j = q⁻ʷ J` with `J(0)=1`, then `q^(wn) P(j)` is a finite sum of
 nonnegative shifts of powers of `J`. Its coefficients recover the coefficients
 of `P` by a unit triangular system. This is the algebraic q-expansion descent
-used after the analytic modular polynomial has been constructed.
+used after the analytic modular polynomial has been constructed. Over an
+arbitrary field tower `F → K → E`, full Galois fixedness of both series
+descends the polynomial to `F` when `K/F` is finite Galois.
 -/
 
 noncomputable section
@@ -175,5 +178,48 @@ theorem map_eq_of_qRegularization_fixed (P : R[X]) (J : PowerSeries R)
   ext k
   rw [Polynomial.coeff_map]
   exact hc k
+
+/-- A full regularized expansion over a finite Galois coefficient field
+descends the polynomial to the base field when both series are fixed. -/
+theorem exists_map_of_fixed_qRegularization
+    {F K E : Type*} [Field F] [Field K] [Field E]
+    [Algebra F K] [Algebra K E] [Algebra F E] [IsScalarTower F K E]
+    [IsGalois F K] [FiniteDimensional F K]
+    (P : E[X]) (J A : PowerSeries K) (hJ : J.constantCoeff = 1)
+    (w n : ℕ) (hw : 0 < w) (hdeg : P.natDegree ≤ n)
+    (hreg : P.qRegularization (PowerSeries.map (algebraMap K E) J) w n =
+      PowerSeries.map (algebraMap K E) A)
+    (hfixedJ : ∀ σ : K ≃ₐ[F] K, PowerSeries.map σ.toRingHom J = J)
+    (hfixedA : ∀ σ : K ≃ₐ[F] K, PowerSeries.map σ.toRingHom A = A) :
+    ∃ Q : F[X], Q.map (algebraMap F E) = P := by
+  let f : K →+* E := algebraMap K E
+  obtain ⟨PK, hPK⟩ := exists_map_of_qRegularization_eq_map
+    f P J hJ w n hw hdeg A hreg
+  have hdegK : PK.natDegree ≤ n := by
+    rw [← Polynomial.natDegree_map_eq_of_injective f.injective PK, hPK]
+    exact hdeg
+  have hregK : PK.qRegularization J w n = A := by
+    apply PowerSeries.map_injective f f.injective
+    calc
+      PowerSeries.map f (PK.qRegularization J w n) =
+          (PK.map f).qRegularization (PowerSeries.map f J) w n :=
+        (qRegularization_map PK J w n f).symm
+      _ = PowerSeries.map f A := by rw [hPK, hreg]
+  have hfixed (σ : K ≃ₐ[F] K) : PK.map σ.toRingHom = PK := by
+    apply map_eq_of_qRegularization_fixed PK J hJ w n hw hdegK σ.toRingHom (hfixedJ σ)
+    rw [hregK]
+    exact hfixedA σ
+  have hcoeff : ∀ i, PK.coeff i ∈ (algebraMap F K).range := by
+    intro i
+    apply (IsGalois.mem_range_algebraMap_iff_fixed (F := F) (E := K) (PK.coeff i)).mpr
+    intro σ
+    have hm := congrArg (fun p : K[X] => p.coeff i) (hfixed σ)
+    rw [Polynomial.coeff_map] at hm
+    exact hm
+  obtain ⟨Q, hQ⟩ : ∃ Q : F[X], Q.map (algebraMap F K) = PK :=
+    (Polynomial.mem_map_range (algebraMap F K)).mpr hcoeff
+  refine ⟨Q, ?_⟩
+  rw [IsScalarTower.algebraMap_eq F K E, ← Polynomial.map_map, hQ]
+  exact hPK
 
 end Polynomial

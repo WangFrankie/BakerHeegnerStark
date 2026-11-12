@@ -14,9 +14,10 @@ import FormClassGroup.ClassGroup.ClassNumber
 
 All actual algebraic conjugates have the original primitive CM discriminant.
 QNF's existing proper reduction puts their j-values in its finite reduced-form
-image. Counting distinct conjugates gives the degree bound, and QNF's proved
-maximal-order class-group/reduced-form correspondence identifies the bound with
-the field class number. No CM reciprocity placeholder is used.
+image. Characteristic-zero separability and splitting over `ℂ` allow counting
+distinct conjugates to give the degree bound. QNF's proved maximal-order
+class-group/reduced-form correspondence identifies the bound with the field
+class number. No CM reciprocity placeholder is used.
 
 The binary quadratic forms and class-group correspondence remain in QNF; only
 the connection to the actual analytic singular modulus is proved here.
@@ -44,8 +45,15 @@ theorem jInvariant_cmPoint_finrank_le_reducedForms_card {m : ℕ}
     (hm : 0 < m) (hm4 : m % 4 = 3) :
     Module.finrank ℚ ℚ⟮jInvariant (cmPoint m)⟯ ≤
       (BinaryQuadraticForm.enumPrimitiveReducedForms (-(m : ℤ))).card := by
-  have hbound := finrank_adjoin_le_card_of_minpoly_roots_subset (jInvariant (cmPoint m))
-    ((singularModulusIntegrality m hm hm4).tower_top (A := ℚ))
+  have hz : IsIntegral ℚ (jInvariant (cmPoint m)) :=
+    (singularModulusIntegrality m hm hm4).tower_top (A := ℚ)
+  have hsep : (minpoly ℚ (jInvariant (cmPoint m))).Separable :=
+    (minpoly.irreducible hz).separable
+  have hsplit :
+      ((minpoly ℚ (jInvariant (cmPoint m))).map (algebraMap ℚ ℂ)).Splits :=
+    IsAlgClosed.splits _
+  have hbound := finrank_adjoin_le_card_of_minpoly_roots_subset
+    (jInvariant (cmPoint m)) hz hsep hsplit
     (reducedFormJValues (-(m : ℤ)))
     (fun _ hx => minpoly_cmPoint_root_mem_reducedFormJValues hm hm4 hx)
   exact hbound.trans (card_reducedFormJValues_le _)

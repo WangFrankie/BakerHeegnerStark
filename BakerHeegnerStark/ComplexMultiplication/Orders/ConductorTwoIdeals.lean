@@ -13,29 +13,31 @@ import QNFMathlib.RingTheory.Ideal.Maps
 # Conductor-Two Normalization of Actual Ideals
 
 A conductor element carries an extended ideal back into the original ideal's
-actual image. If the larger order is principal, a generator of that extension
-normalizes its complex image into the conductor interval. The specialization
-uses QNF's actual half-integer order and the genuine field-class-number-one
-hypothesis, not an assumed list of small-order classes.
+actual image. If that extended ideal is principal, its generator normalizes
+the complex image into the conductor interval; the larger ring need not be
+a principal ideal ring. The specialization uses QNF's actual half-integer
+order and the genuine field-class-number-one hypothesis, not an assumed list
+of small-order classes.
 -/
 
 namespace BakerHeegnerStark
 
 open scoped Pointwise nonZeroDivisors
 
-/-- A principal extension normalizes every nonzero integral ideal image into
-the actual conductor interval in the complex plane. -/
+/-- A nonzero integral ideal whose extension is principal has its actual image
+normalized into the conductor interval in the complex plane. -/
 theorem ideal_complex_image_normalization {R S : Type*} [CommRing R] [CommRing S]
-    [IsPrincipalIdealRing S] (j : R →ₐ[ℤ] S) (g : S →ₐ[ℤ] ℂ)
+    (j : R →ₐ[ℤ] S) (g : S →ₐ[ℤ] ℂ)
     (hj : Function.Injective j) (hg : Function.Injective g)
     (c : S) (hc : ∀ s : S, c * s ∈ j.toRingHom.range)
-    (A : Ideal R) (hA : A ≠ ⊥) :
+    (A : Ideal R) (hA : A ≠ ⊥) (hprincipal : (Ideal.map j.toRingHom A).IsPrincipal) :
     ∃ α : ℂ, α ≠ 0 ∧
       g c • Submodule.map g.toLinearMap (⊤ : Submodule ℤ S) ≤
         α • Submodule.map (g.comp j).toLinearMap (A.restrictScalars ℤ) ∧
       α • Submodule.map (g.comp j).toLinearMap (A.restrictScalars ℤ) ≤
         Submodule.map g.toLinearMap (⊤ : Submodule ℤ S) := by
   let B := Ideal.map j.toRingHom A
+  let : B.IsPrincipal := hprincipal
   obtain ⟨a, ha⟩ := Submodule.IsPrincipal.principal B
   obtain ⟨x, hx, hx0⟩ := A.ne_bot_iff.mp hA
   have ha0 : a ≠ 0 := by
@@ -114,7 +116,7 @@ theorem sqrtOrderIdeal_complex_image_normalization (p : ℕ) (k : ℤ)
       exact Submodule.mem_map.mpr ⟨x, by simp, hx⟩
   obtain ⟨α, hα, hlo, hhi⟩ := ideal_complex_image_normalization j g
     (ZOnePlusSqrtdOverTwo.fromZsqrtd_injective k hk) (halfOrderEmbedding_injective p k hk)
-    2 hc A hA
+    2 hc A hA (IsPrincipalIdealRing.principal _)
   refine ⟨α, hα, ?_, ?_⟩
   · simpa only [map_ofNat, hlarge, hcomp] using hlo
   · simpa only [hlarge, hcomp] using hhi
